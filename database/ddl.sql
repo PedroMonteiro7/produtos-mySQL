@@ -1,4 +1,5 @@
 create database icatalogo;
+
 use icatalogo;
 
 create table tbl_produto(
