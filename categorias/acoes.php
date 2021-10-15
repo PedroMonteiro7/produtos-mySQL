@@ -5,20 +5,6 @@ session_start();
 /*CONEXÃO COM O BANCO DE DADOS*/
 require('../database/conexao.php');
 
-/*FUNÇÃO DE VALIDAÇÃO*/
-function validarCampos() {
-
-    $erros = [];
-
-    if(!isset($_POST['descricao']) || $_POST['descricao'] == ""){
-
-        $erros[] = "O campo descrição é de preenchimento obrigatório";
-
-    }
-
-    return $erros;
-
-}
 
 /*TRATAMENTO DOS DADOS VINDOS DO FORMULÁRIO
 
@@ -28,20 +14,6 @@ function validarCampos() {
 
 switch ($_POST['acao']) {
     case 'inserir':
-
-        //CHAMADA DA FUNÇÃO VALIDAÇÃO DE ERROS:
-        $erros = validarCampos();
-
-        //VERIFICAR SE EXISTEM ERROS:
-        if(count($erros) > 0) {
-
-            $_SESSION["erros"] = $erros;
-
-            header('location:index.php');
-
-            exit;
-
-        }
 
         // echo 'inserir'; exit;
         $descricao = $_POST['descricao'];
@@ -57,7 +29,7 @@ switch ($_POST['acao']) {
 
         $resultado = mysqli_query($conexao, $sql);
 
-        header('location:index.php');
+        header('location: index.php');
 
         // echo '<pre>';
         // var_dump($resultado);
@@ -86,7 +58,7 @@ switch ($_POST['acao']) {
         
         $resultado = mysqli_query($conexao, $sql);
 
-        header('location:index.php');
+        header('location: index.php');
 
         break;
     

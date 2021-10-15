@@ -1,5 +1,7 @@
 <?php
 
+  session_start();
+
   //CONEXÃO COM O BANCO DE DADOS
   require('../../database/conexao.php');
 
@@ -39,27 +41,41 @@
           <h1>Cadastro de produto</h1>
 
           <ul>
+            <?php
+            
+              if (isset($_SESSION["erros"])) {
+                
+                foreach ($_SESSION["erros"] as $erro) {
 
+                  echo "<li> $erro </li>";
+
+                }
+
+                unset($_SESSION["erros"]);
+
+              }
+            
+            ?>
           </ul>
 
           <div class="input-group span2">
             <label for="descricao">Descrição</label>
-            <input type="text" name="descricao" id="descricao" required>
+            <input type="text" name="descricao" id="descricao">
           </div>
 
           <div class="input-group">
             <label for="peso">Peso</label>
-            <input type="text" name="peso" id="peso" required>
+            <input type="text" name="peso" id="peso">
           </div>
 
           <div class="input-group">
             <label for="quantidade">Quantidade</label>
-            <input type="text" name="quantidade" id="quantidade" required>
+            <input type="text" name="quantidade" id="quantidade">
           </div>
 
           <div class="input-group">
             <label for="cor">Cor</label>
-            <input type="text" name="cor" id="cor" required>
+            <input type="text" name="cor" id="cor">
           </div>
 
           <div class="input-group">
@@ -69,7 +85,7 @@
 
           <div class="input-group">
             <label for="valor">Valor</label>
-            <input type="text" name="valor" id="valor" required>
+            <input type="text" name="valor" id="valor">
           </div>
 
           <div class="input-group">
@@ -80,7 +96,7 @@
           <div class="input-group">
 
             <label for="categoria">Categoria</label>
-            <select id="categoria" name="categoria" required>
+            <select id="categoria" name="categoria">
               <option value="">SELECIONE</option>
               
               <!-- Início da listagem de categorias vindas do Banco -->
