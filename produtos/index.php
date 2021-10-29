@@ -2,7 +2,9 @@
 
     require('../database/conexao.php');
 
-    $sql = "SELECT p.*, c.descricao FROM tbl_produto p INNER JOIN tbl_categoria c ON p.categoria_id = c.id";
+    $sql = "SELECT p.*, c.descricao AS nome_categoria FROM tbl_produto p
+            INNER JOIN tbl_categoria c ON
+            p.categoria_id = c.id";
 
     $resultado = mysqli_query($conexao, $sql);
 
@@ -35,12 +37,12 @@
 
             <!-- BOTÕES DE INSERÇÃO DE PRODUTOS E CATEGORIAS -->
             <!-- CASO O USUÁRIO ESTEJA LOGADO EXIBE OS BOTÕES DE CADASTRO -->
-    
-                <header>
-                    <button onclick="javascript:window.location.href ='./novo/'">Novo Produto</button>
-                    <button onclick="javascript:window.location.href ='../categorias/'">Adicionar Categoria</button>
-                </header>
-
+                <?php if (isset($_SESSION["usuarioId"])) {?>
+                    <header>
+                        <button onclick="javascript:window.location.href ='./novo/'">Novo Produto</button>
+                        <button onclick="javascript:window.location.href ='../categorias/'">Adicionar Categoria</button>
+                    </header>
+                <?php } ?>
             <main>
 
                 <!-- LISTAGEM DE PRODUTOS (INICIO) -->
@@ -48,55 +50,60 @@
                 <?php
                 
                     while ($produto = mysqli_fetch_array($resultado)) {
-
+                        // var_dump($produto);exit;
                         $valor = $produto["valor"];
                         $desconto = $produto["desconto"];
+
 
                         $valorDesconto = 0;
 
                         if ($desconto > 0) {
-
+                            
                             $valorDesconto = ($desconto / 100) * $valor;
+                            
 
                         }
 
-                        $qtdeParcelas = $valor > 1000 ? 12 : 6;
-                        $valorComDesconto = $valor - $valorDesconto;
-                        //$valor = $valor - $valorDesconto;
-                        //$valor -= $valorDesconto;
+                        $qtdParcelas = $valor > 1000 ? 12 : 6;
 
-                        $valorParcela = $valorComDesconto / $qtdeParcelas;
-                
+                        $valorComDesconto = $valor - $valorDesconto;
+                        // $valor = $valor - $valorDesconto;
+                        // $valor -= $valorDesconto;
+
+                        $valorParcela = $valorComDesconto / $qtdParcelas;
+
                 ?>
 
                 <article class="card-produto">
 
+                <?php if (isset($_SESSION["usuarioId"])) {?>
                     <div class="acoes-produtos">
-                        <img onclick="javascript: window.location = './editar/?id=<?= $produto['id'] ?>'" src="../imgs/edit.svg" />
-                        <img onclick="deletar(<?= $produto['id'] ?>)" src="../imgs/trash.svg" />
+                    <img onclick="javascript: window.location = './editar/?id=<?= $produto['id'] ?>'" src="../imgs/edit.svg" />
+                    <img onclick="deletar(<?= $produto['id'] ?>)" src="../imgs/trash.svg" />
                     </div>
-    
+                <?php } ?>
+
                 <figure>
-                     <img src="fotos/<?= $produto["imagem"] ?>" />
+                     <img src="fotos/<?php echo $produto["imagem"]?>" />
                 </figure>
 
                 <section>
 
                     <span class="preco">
-                        R$ <?= number_format($valorComDesconto, 2, ',', '.') ?>
-                        <em><?= $desconto ?>% off</em>
+                        R$ <?php echo number_format($valorComDesconto, 2, ',', '.'); ?>
+                        <em> <?php echo $desconto; ?> % off</em>
                     </span>
 
                     <span class="parcelamento">ou em
                         <em>
-                       <?= $qtdeParcelas ?> x R$ <?= number_format($valorParcela, 2, ',', '.') ?> sem juros
+                        <?php echo $qtdParcelas; ?> x R$ <?php echo number_format($valorParcela, 2, ",", ".")?> sem juros
                         </em>
                     </span>
 
-                    <span class="descricao"><?= $produto["descricao"] ?></span>
+                    <span class="descricao"><?php echo $produto["descricao"]?></span>
 
                     <span class="categoria">
-                        <em><?= $produto["descricao"] ?></em>
+                        <em><?php echo $produto["nome_categoria"]; ?></em>
                      </span>
 
                 </article>

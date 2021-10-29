@@ -2,13 +2,22 @@
 
   session_start();
 
-  //CONEXÃO COM O BANCO DE DADOS
+  /*
+  CONEXÃO COM O BANCO DE DADOS
+  
+  produto/novo
+  ../
+  produto/
+  ../
+  /dabase/conexao.php
+
+  */
   require('../../database/conexao.php');
 
-  //QUERY SQL
+  /*QUERY SQL*/
   $sql = "SELECT * FROM tbl_categoria";
 
-  //EXECUTAR A QUERY SQL NA BASE DE DADOS
+  /*EXECUTAR A QUERY SQL NA BASE DE DADOS*/
   $resultado = mysqli_query($conexao, $sql);
 
 ?>
@@ -28,6 +37,9 @@
 
 <body>
 
+    <!-- INCLUSÃO DO COMPONENTE HEADER -->
+    <?php include('../../componentes/header/header.php'); ?>
+
   <div class="content">
 
     <section class="produtos-container">
@@ -41,12 +53,13 @@
           <h1>Cadastro de produto</h1>
 
           <ul>
+
             <?php
             
               if (isset($_SESSION["erros"])) {
                 
                 foreach ($_SESSION["erros"] as $erro) {
-
+                  
                   echo "<li> $erro </li>";
 
                 }
@@ -56,26 +69,27 @@
               }
             
             ?>
+
           </ul>
 
           <div class="input-group span2">
             <label for="descricao">Descrição</label>
-            <input type="text" name="descricao" id="descricao">
+            <input type="text" name="descricao" id="descricao" >
           </div>
 
           <div class="input-group">
             <label for="peso">Peso</label>
-            <input type="text" name="peso" id="peso">
+            <input type="text" name="peso" id="peso" >
           </div>
 
           <div class="input-group">
             <label for="quantidade">Quantidade</label>
-            <input type="text" name="quantidade" id="quantidade">
+            <input type="text" name="quantidade" id="quantidade" >
           </div>
 
           <div class="input-group">
             <label for="cor">Cor</label>
-            <input type="text" name="cor" id="cor">
+            <input type="text" name="cor" id="cor" >
           </div>
 
           <div class="input-group">
@@ -85,7 +99,7 @@
 
           <div class="input-group">
             <label for="valor">Valor</label>
-            <input type="text" name="valor" id="valor">
+            <input type="text" name="valor" id="valor" >
           </div>
 
           <div class="input-group">
@@ -96,16 +110,18 @@
           <div class="input-group">
 
             <label for="categoria">Categoria</label>
-            <select id="categoria" name="categoria">
+            <select id="categoria" name="categoria" >
               <option value="">SELECIONE</option>
-              
-              <!-- Início da listagem de categorias vindas do Banco -->
+        
+                <!-- INICIO DA LISTAGEM DE CATEGORIAS VINDAS DO BANCO -->
                 <?php
+                
                   while ($categoria = mysqli_fetch_array($resultado)) {
+   
                 ?>
-                <option value="<?= $categoria["id"] ?>"><?= $categoria["descricao"] ?></option>
+                <option value="<?php echo $categoria["id"]?>"><?php echo $categoria["descricao"]?></option>
                 <?php } ?>
-              <!-- Fim da listagem de categorias vindas do Banco -->
+                <!-- FIM DA LISTAGEM DE CATEGORIAS VINDAS DO BANCO -->
               
             </select>
 

@@ -8,12 +8,14 @@
 
     $resultado = mysqli_query($conexao, $sql);
 
+    // $categoria = mysqli_fetch_array($resultado);
+
     // echo '<pre>';
-    // var_dump($resultado);
+    // var_dump($categoria);
     // echo '</pre>';
+    // exit;
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -36,24 +38,27 @@
                 <form class="form-categoria" method="POST" action="./acoes.php">
                     <input type="hidden" name="acao" value="inserir" />
                     <h1 class="span2">Adicionar Categorias</h1>
-
+                    
                     <ul>
                     <?php
-                    if(isset($_SESSION["erros"])){
+                        if(isset($_SESSION["erros"])){
 
-                        foreach ($_SESSION["erros"] as $erro) {
-                    
+                            foreach ($_SESSION["erros"] as $erro) {
+                                
                     ?>
 
-                            <li><?= $erro ?></li>
- 
+                        <li><?php echo $erro?></li>
+
                     <?php
-                                
-                            } //fim do foreach
+                        }//fim do foreach
 
-                            session_unset();
+                        //Limpa a variável de sessão
+                        session_unset();
+                        
+                        //Destroi a sessão
+                        session_destroy();
 
-                        } //fim do if
+                    }//fim do if 
                     ?>
                     </ul>
 
@@ -67,13 +72,17 @@
                 <h1>Lista de Categorias</h1>
 
                     <?php
-                        while($categoria = mysqli_fetch_array($resultado)) {
+                    
+                        while($categoria = mysqli_fetch_array($resultado)){
+
                     ?>
+
                     <div class="card-categorias">
-                        <?= $categoria["descricao"] ?>
-                        <img onclick="deletar(<?= $categoria['id'] ?>)" src="https://icons.veryicon.com/png/o/construction-tools/coca-design/delete-189.png" />
-                        <img onclick="javascript:window.location = 'editar.php?id=<?= $categoria['id']; ?>'" src="https://icons.veryicon.com/png/o/application/enterprise-edition/edit-53.png" />
+                        <?php echo $categoria["descricao"]; ?>
+                        <img onclick="deletar(<?php echo $categoria['id']; ?>)" src="https://icons.veryicon.com/png/o/construction-tools/coca-design/delete-189.png" />
+                        <img onclick="javascript: window.location = 'editar.php?id=<?php echo $categoria['id']; ?>'" src="https://icons.veryicon.com/png/o/leisure/weight-with-linear-icon/edit-65.png" />
                     </div>
+
                     <?php } ?>
 
                 <form id="form-deletar" method="POST" action="./acoes.php">
